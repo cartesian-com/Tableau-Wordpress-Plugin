@@ -20,11 +20,27 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 // define shortcode parameters
 
+function tableau_get_ticket($server, $user)
+{
+    $data = "username=${user}";
+    $url = "${server}/trusted";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    return $response;
+}
+
 function tableau_func( $atts, $content = null ) {
 	extract( shortcode_atts( array(
     	'server' => 'public.tableausoftware.com',
     	'workbook' => 'workbook_name',
     	'view' => 'view_name',
+    	'username' => 'username',
 		'tabs' => 'yes',
 		'toolbar' => 'yes',
 		'revert' => '',
@@ -32,6 +48,7 @@ function tableau_func( $atts, $content = null ) {
 		'width' => '800px',
     	'height' => '600px',  
 		'linktarget' => '',			
+		'trusted' => '',			
 		'options' => array(
 						'display_name' => 'tableau',
 						'open_tag' => '\n[tableau]',
@@ -39,7 +56,66 @@ function tableau_func( $atts, $content = null ) {
 						'key' => '')
     ), $atts));
 
-	$output = "<iframe src='http://{$server}/views/{$workbook}/{$view}?:embed=yes&:tabs={$tabs}&:toolbar={$toolbar}?:revert={$revert}?:refresh={$refresh}?:linktarget=($linktarget}' width='{$width}' height='{$height}'></iframe>";
+    if (!(strpos($server, "http://") === 0 || strpos($server, "https://") === 0))
+    {
+        $server = "http://${server}";
+    }
+
+    $url = $server;
+
+    if ($username !== "")
+    {
+        $ticket = tableau_get_ticket($server, $username);
+
+        if ($ticket)
+        {
+            $url .= "/trusted/${ticket}";
+        }
+    }
+
+    $url .= "/views/{$workbook}/{$view}";
+
+    // Id of the container
+    $divid = "tableau_${workbook}_${view}";
+
+    $output = "";
+    $output .= "<script type=\"text/javascript\" src=\"${server}/javascripts/api/tableau_v8.debug.js\"></script>";
+    $output .= "<div id=\"${divid}\"></div>";
+    $output .= "<script>";
+    $output .= "var div = document.getElementById(\"${divid}\");";
+    $output .= "var options = {";
+
+    if ($width !== "")
+    {
+        $output .= "width: \"${width}\",";
+    }
+    if ($height !== "")
+    {
+        $output .= "height: \"${height}\",";
+    }
+
+    if ($tabs == "yes")
+    {
+        $output .= "hideTabs: false,";
+    }
+    else
+    {
+        $output .= "hideTabs: true,";
+    }
+
+    if ($toolbar == "yes")
+    {
+        $output .= "hideToolbar: false,";
+    }
+    else
+    {
+        $output .= "hideToolbar: true,";
+    }
+
+    $output .= "};";
+    $output .= "var viz = new tableauSoftware.Viz(div, \"${url}\", options);";
+    $output .= "</script>";
+
     return $output;
 }
 
@@ -52,7 +128,7 @@ function tableau_addbuttons() {
    // Add only in Visual Editor mode
 	if ( get_user_option( 'rich_editing' ) == 'true' ) {
    		add_filter( 'mce_external_plugins', 'add_tableau_mce_plugin' );
-     	add_filter( 'mce_buttons_2', 'register_tableau_button' );
+     	add_filter( 'mce_buttons', 'register_tableau_button' );
 	}
 }
 
@@ -65,7 +141,7 @@ add_action( 'admin_footer', 'tableau_quicktag' );
 function tableau_quicktag() {
 ?>
 	<script type="text/javascript" charset="utf-8">
-		QTags.addButton( 'tableau-plugin', 'tableau', '\n[tableau server="" workbook="" view="" tabs="" toolbar="" revert="" refresh="" linktarget="" width="800px" height="600px"]', '[/tableau]\n' );
+		QTags.addButton( 'tableau-plugin', 'tableau', '\n[tableau server="" workbook="" view="" tabs="" toolbar="" revert="" refresh="" linktarget="" width="800px" height="600px" trusted=""]', '[/tableau]\n' );
 	</script>
 <?php 
 }

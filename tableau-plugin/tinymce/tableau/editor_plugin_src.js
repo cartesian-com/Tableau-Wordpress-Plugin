@@ -11,7 +11,7 @@
 			ed.addCommand('mceTableau', function() {
 				ed.windowManager.open({
 					file : url + '/tableau.htm',
-					width : 400,
+					width : 500,
 					height : 400,
 					inline : 1
 				}, {

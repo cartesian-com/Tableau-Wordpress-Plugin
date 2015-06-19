@@ -11,11 +11,11 @@
 <form border="0" onsubmit="mceInsertTableau(); return false;" action="#submit">
   <br />
   <p align="left" class="field-helper"><span class="form-heading"><strong>Tableau Server View:</strong></span> (Required)</p>
-  <table width="275" border="0">
+  <table border="0">
 <tr>
-        <td width="79" class="field-label">Server:</td>
+        <td class="field-label">Server:</td>
         
-        <td width="186"><input type="text" id="server_name" tabindex="1" />
+        <td><input type="text" id="server_name" tabindex="1" />
         </td>
       </tr>
       <tr>
@@ -28,60 +28,49 @@
         <td><label for="view_name"></label>
         <input type="text" name="view_name" id="view_name" tabindex="3" /></td>
       </tr>
+      <tr>
+        <td class="field-label">Tableau User:</td>
+        <td><label for="username"></label>
+        <input type="text" name="username" id="username" tabindex="4" />(Specify to use Trusted Tokens)</td>
   </table>
   <br />
     <fieldset>
     <p align="left" class="field-helper"><span class="form-heading"><strong>Embed Parameters:</strong></span> (Optional)</p>
-    <table width="337" border="0">
+    <table border="0">
+    <tr colspan="3">
+        <td><input name="tabs" type="checkbox" id="tabs" tabindex="10" value="" />
+        <label for="tabs" class="field-label">Show as Tabs</label></td>
+     </tr>
+<tr colspan="3">
+        <td><input name="toolbar" type="checkbox" id="toolbar" tabindex="11" value="" />
+        <label for="toolbar" class="field-label">Show Toolbar</label></td>
+</tr>
       <tr>
         <td colspan="3" class="field-label">Display Size:</td>
-        <td width="156">&nbsp;</td>
       </tr>
       <tr>
-        <td width="68" class="field-label">Width</td>
-        <td width="37"><label for="width"></label>
-          <input type="text" class="field-label" id="width" tabindex="4" value="800" size="6" /></td>
-        <td width="58"><label for="w_unit" ></label>
+        <td class="field-label">Width</td>
+        <td><label for="width"></label>
+          <input type="text" class="field-label" id="width" tabindex="4" value="" size="6" /></td>
+        <td><label for="w_unit" ></label>
           <select name="w_units" id="w_unit" tabindex="5">
             <option value="px" >px</option>
             <option value="per">%</option>
           </select>
+          (Leave blank for auto)
         </td>
-        <td><input name="tabs" type="checkbox" id="tabs" tabindex="10" value="" />
-        <label for="tabs" class="field-label">Show as Tabs</label></td>
       </tr>
       <tr>
         <td class="field-label">Height</td>
         <td><label for="height"></label>
-          <input name="height" type="text" class="field-label" id="height" tabindex="6" value="600" size="6"/></td>
+          <input name="height" type="text" class="field-label" id="height" tabindex="6" value="" size="6"/></td>
         <td><label for="h_unit"></label>
           <select name="h_unit" id="h_unit" tabindex="7">
             <option value="px">px</option>
             <option value="per">%</option>
-          </select></td>
-        <td><input name="toolbar" type="checkbox" id="toolbar" tabindex="11" value="" />
-        <label for="toolbar" class="field-label">Show Toolbar</label></td>
-      </tr>
-      <tr>
-        <td class="field-label">Link Target</td>
-        <td colspan="2"><label for="linktarget"></label>
-          <input name="linktarget" type="text" id="linktarget" tabindex="8" size="14" /></td>
-        <td><input name="refresh" type="checkbox" id="refr" tabindex="12" value="" />
-        <span class="field-label">Disable</span> <span class="field-label">Refresh</span></td>
-      </tr>
-      <tr>
-        <td class="field-label">Revert</td>
-        <td colspan="2"><span class="field-label">
-          <select name="revert" id="revert" tabindex="9">
-            <option vlaue="null" selected="selected" style="font-style:italic;">-Select-</option>
-            <option value="all">All</option>
-            <option value="filters">Filters</option>
-            <option value="sorts">Sorts</option>
-            <option value="axes">Axes</option>
-            <option value="shelves">Shelves</option>
           </select>
-        </span></td>
-        <td>&nbsp;</td>
+          (Leave blank for auto)
+        </td>
       </tr>
     </table>
   </fieldset>

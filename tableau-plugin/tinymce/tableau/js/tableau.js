@@ -11,6 +11,7 @@ jQuery("form").submit(function mceInsertTableau($) {
 	        var server = $("#server_name").val();
 	        var workbook = $("#workbook_name").val();
 	        var view = $("#view_name").val();
+	        var username = $("#username").val();
 			if ($("#tabs").attr('checked') == true) {
 				var tabs = "yes";
 			}
@@ -52,7 +53,7 @@ jQuery("form").submit(function mceInsertTableau($) {
 			}
 
 			//create shortcode
-	        var code =  '\n[tableau server="'+server+'" workbook="'+workbook+'" view="'+view+'" tabs="'+tabs+'" toolbar="'+toolbar+'" revert="'+revert+'" refresh="'+refr+'" linktarget="'+linktarget+'" width="'+width+''+w_unit+'" height="'+height+''+h_unit+'"][/tableau]\n';    
+	        var code =  '\n[tableau server="'+server+'" workbook="'+workbook+'" view="'+view+'" username="' + username + '" tabs="'+tabs+'" toolbar="'+toolbar+'" revert="'+revert+'" refresh="'+refr+'" linktarget="'+linktarget+'" width="'+width+''+w_unit+'" height="'+height+''+h_unit+'"][/tableau]\n';    
 
 	 tinyMCEPopup.execCommand('mceInsertContent', false, code);
 	 tinyMCEPopup.close();	    
